@@ -48,18 +48,12 @@ functions[compinit]=$'print -u2 \'warning: compinit being called again after com
 #
 # Zsh options
 #
-local glob_case_sensitivity completion_case_sensitivity
-zstyle -s ':zim:glob' case-sensitivity glob_case_sensitivity || glob_case_sensitivity=insensitive
-zstyle -s ':zim:completion' case-sensitivity completion_case_sensitivity || completion_case_sensitivity=insensitive
 
 # Move cursor to end of word if a full completion is inserted.
 setopt ALWAYS_TO_END
 
-if [[ ${glob_case_sensitivity} == sensitive ]]; then
-  setopt CASE_GLOB
-else
-  setopt NO_CASE_GLOB
-fi
+# Case insensitive globbing
+setopt NO_CASE_GLOB
 
 # Don't beep on ambiguous completions.
 setopt NO_LIST_BEEP
@@ -83,11 +77,7 @@ zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
 zstyle ':completion:*' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
-if [[ ${completion_case_sensitivity} == sensitive ]]; then
-  zstyle ':completion:*' matcher-list '' 'r:|?=**'
-else
-  zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
-fi
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
 
 # Insert a TAB character instead of performing completion when left buffer is empty.
 zstyle ':completion:*' insert-tab false
@@ -139,5 +129,3 @@ zstyle ':completion:*:rm:*' file-patterns '*:all-files'
 # Man
 zstyle ':completion:*:manuals' separate-sections true
 zstyle ':completion:*:manuals.(^1*)' insert-sections true
-
-unset glob_case_sensitivity completion_case_sensitivity
