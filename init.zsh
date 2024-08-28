@@ -66,7 +66,8 @@ setopt NO_LIST_BEEP
 zstyle ':completion::complete:*' use-cache on
 
 # Group matches and describe.
-zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' menu no
+zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:matches' group yes
 zstyle ':completion:*:options' description yes
 zstyle ':completion:*:options' auto-description '%d'
@@ -78,6 +79,9 @@ zstyle ':completion:*' format '%F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' '+r:|?=**'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:*' switch-group '<' '>'
 
 # Insert a TAB character instead of performing completion when left buffer is empty.
 zstyle ':completion:*' insert-tab false
@@ -88,12 +92,7 @@ zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec)|prompt_*)'
 zstyle ':completion:*:*:-subscript-:*' tag-order 'indexes' 'parameters'
 
 # Directories
-if (( ${+LS_COLORS} )); then
-  zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-else
-  # Use same LS_COLORS definition from utility module, in case it was not set
-  zstyle ':completion:*:default' list-colors ${(s.:.):-di=1;34:ln=35:so=32:pi=33:ex=31:bd=1;36:cd=1;33:su=30;41:sg=30;46:tw=30;42:ow=30;43}
-fi
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:*:cd:*:directory-stack' menu yes select
 zstyle ':completion:*' squeeze-slashes true
 
